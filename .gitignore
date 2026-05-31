@@ -1,0 +1,6 @@
+.claude/
+node_modules/
+.vercel/
+*.log
+desktop.ini
+brand-dashboard/

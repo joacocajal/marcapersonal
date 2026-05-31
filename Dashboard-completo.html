@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dashboard · @soyjoacocajal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* ============================================================
+   Joaquín Cajal — Personal Brand Dashboard
+   Dark premium system · inspirado en Linear / Vercel / Raycast
+   ============================================================ */
+
+:root {
+  /* Surfaces */
+  --bg:            #0a0a0a;
+  --surface-1:     #111111;
+  --surface-2:     #1a1a1a;
+  --surface-3:     #202020;
+
+  /* Borders / hairlines */
+  --border:        rgba(255, 255, 255, 0.07);
+  --border-strong: rgba(255, 255, 255, 0.11);
+  --border-faint:  rgba(255, 255, 255, 0.04);
+
+  /* Text */
+  --text:          #f5f5f6;
+  --text-2:        #a0a0a8;
+  --text-3:        #6b6b73;
+  --text-4:        #48484f;
+
+  /* Accent — violeta eléctrico */
+  --accent:        #7c3aed;
+  --accent-hi:     #9d6bff;
+  --accent-lo:     #5b21b6;
+  --accent-glow:   rgba(124, 58, 237, 0.16);
+  --accent-soft:   rgba(124, 58, 237, 0.10);
+
+  /* Platform hues */
+  --tiktok:   #ff2d55;
+  --ig:       #e1306c;
+  --yt:       #ff3b30;
+  --x:        #e7e7ea;
+  --li:       #2d8cff;
+
+  /* Status (calendario) */
+  --st-borrador:  #71717a;
+  --st-filmado:   #d4a418;
+  --st-editado:   #2d8cff;
+  --st-publicado: #2dd4a7;
+
+  /* Geometry */
+  --r-sm: 8px;
+  --r-md: 11px;
+  --r-lg: 16px;
+  --r-pill: 999px;
+
+  --sidebar-w: 256px;
+  --sidebar-w-collapsed: 72px;
+
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.01em;
+}
+
+::selection { background: var(--accent-glow); color: #fff; }
+
+/* Scrollbars */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.08);
+  border-radius: 99px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.14); background-clip: padding-box; }
+
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+input, textarea { font-family: inherit; }
+
+/* ============================================================
+   APP SHELL
+   ============================================================ */
+.app {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  height: 100vh;
+  transition: grid-template-columns 0.32s var(--ease);
+}
+.app.collapsed { grid-template-columns: var(--sidebar-w-collapsed) 1fr; }
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+  background: var(--surface-1);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 18px 18px;
+  position: relative;
+}
+.avatar {
+  width: 38px; height: 38px;
+  border-radius: 11px;
+  flex-shrink: 0;
+  background: linear-gradient(140deg, var(--accent-hi), var(--accent-lo));
+  display: grid; place-items: center;
+  font-weight: 650; font-size: 15px; color: #fff;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.08) inset, 0 4px 16px var(--accent-glow);
+  letter-spacing: 0;
+}
+.brand-meta { display: flex; flex-direction: column; min-width: 0; }
+.brand-name { font-weight: 600; font-size: 14px; color: var(--text); white-space: nowrap; }
+.brand-handle { font-size: 12.5px; color: var(--text-3); white-space: nowrap; }
+.brand-meta, .nav-label, .nav-section-label, .sidebar-foot { transition: opacity 0.18s ease; }
+.app.collapsed .brand-meta,
+.app.collapsed .nav-label,
+.app.collapsed .nav-section-label,
+.app.collapsed .sidebar-foot .sf-text { opacity: 0; pointer-events: none; }
+
+.nav { padding: 6px 12px; display: flex; flex-direction: column; gap: 2px; }
+.nav-section-label {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.04em;
+  color: var(--text-4); text-transform: uppercase;
+  padding: 14px 10px 6px;
+  white-space: nowrap;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 11px;
+  padding: 8px 10px;
+  border-radius: var(--r-sm);
+  color: var(--text-2);
+  font-size: 13.5px; font-weight: 450;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+  position: relative;
+}
+.nav-item:hover { background: var(--surface-2); color: var(--text); }
+.nav-item.active { background: var(--surface-2); color: var(--text); }
+.nav-item.active::before {
+  content: ''; position: absolute; left: -12px; top: 50%; transform: translateY(-50%);
+  width: 3px; height: 17px; border-radius: 0 3px 3px 0;
+  background: var(--accent); box-shadow: 0 0 10px var(--accent-glow);
+}
+.nav-item .ic { width: 18px; height: 18px; flex-shrink: 0; color: currentColor; opacity: 0.85; }
+.nav-item.active .ic { color: var(--accent-hi); opacity: 1; }
+
+.sidebar-foot {
+  margin-top: auto;
+  padding: 12px;
+  border-top: 1px solid var(--border);
+}
+.sf-card {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 10px; border-radius: var(--r-sm);
+  background: var(--surface-2);
+  border: 1px solid var(--border-faint);
+}
+.sf-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--st-publicado); box-shadow: 0 0 8px var(--st-publicado); flex-shrink: 0; }
+.sf-text { display: flex; flex-direction: column; min-width: 0; white-space: nowrap; }
+.sf-text b { font-size: 12.5px; font-weight: 550; }
+.sf-text span { font-size: 11px; color: var(--text-3); }
+
+/* Collapse toggle */
+.collapse-btn {
+  position: absolute; top: 22px; right: -11px; z-index: 20;
+  width: 22px; height: 22px; border-radius: 7px;
+  background: var(--surface-2); border: 1px solid var(--border-strong);
+  display: grid; place-items: center; color: var(--text-2);
+  transition: background 0.15s, color 0.15s, transform 0.3s var(--ease);
+}
+.collapse-btn:hover { background: var(--surface-3); color: var(--text); }
+.app.collapsed .collapse-btn svg { transform: rotate(180deg); }
+.collapse-btn svg { transition: transform 0.3s var(--ease); }
+
+/* ============================================================
+   MAIN
+   ============================================================ */
+.main { overflow-y: auto; height: 100vh; position: relative; }
+
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 32px;
+  background: rgba(10,10,10,0.72);
+  backdrop-filter: blur(14px) saturate(140%);
+  border-bottom: 1px solid var(--border);
+}
+.topbar-l { display: flex; flex-direction: column; gap: 2px; }
+.crumb { font-size: 12px; color: var(--text-3); font-weight: 450; }
+.page-title { font-size: 19px; font-weight: 600; letter-spacing: -0.02em; }
+.topbar-r { display: flex; align-items: center; gap: 10px; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 13px; border-radius: var(--r-sm);
+  font-size: 13px; font-weight: 500;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-2); color: var(--text);
+  transition: background 0.15s, border-color 0.15s, transform 0.08s;
+}
+.btn:hover { background: var(--surface-3); border-color: var(--border-strong); }
+.btn:active { transform: scale(0.98); }
+.btn .ic { width: 15px; height: 15px; opacity: 0.8; }
+.btn.primary {
+  background: var(--accent); border-color: transparent; color: #fff;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.06) inset, 0 6px 20px -6px var(--accent-glow);
+}
+.btn.primary:hover { background: var(--accent-hi); }
+.btn.ghost { background: transparent; border-color: var(--border); color: var(--text-2); }
+.btn.ghost:hover { background: var(--surface-2); color: var(--text); }
+.btn.sm { padding: 6px 10px; font-size: 12.5px; }
+
+.content { padding: 28px 32px 64px; max-width: 1280px; }
+
+/* page transitions */
+.page { display: none; animation: fade 0.35s var(--ease); }
+.page.active { display: block; }
+@keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* ============================================================
+   GENERIC CARD / PRIMITIVES
+   ============================================================ */
+.card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+}
+.section-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin: 34px 0 14px;
+}
+.section-head:first-child { margin-top: 0; }
+.section-head h2 { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; }
+.section-head .hint { font-size: 12.5px; color: var(--text-3); }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 8px; border-radius: var(--r-pill);
+  font-size: 11px; font-weight: 500; letter-spacing: 0.01em;
+}
+.badge .dot { width: 6px; height: 6px; border-radius: 50%; }
+.badge.api {
+  background: var(--surface-2); border: 1px solid var(--border-strong);
+  color: var(--text-2); cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.badge.api:hover { background: var(--accent-soft); color: var(--accent-hi); border-color: var(--accent); }
+.badge.api.connected { color: var(--st-publicado); border-color: rgba(45,212,167,0.3); background: rgba(45,212,167,0.08); cursor: default; }
+
+.kbd {
+  font-family: var(--mono); font-size: 11px;
+  padding: 2px 6px; border-radius: 5px;
+  background: var(--surface-2); border: 1px solid var(--border);
+  color: var(--text-3);
+}
+
+/* ============================================================
+   MÉTRICAS
+   ============================================================ */
+.summary-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+}
+.summary-card { padding: 18px 20px; position: relative; overflow: hidden; }
+.summary-card .sc-label { font-size: 12.5px; color: var(--text-3); display: flex; align-items: center; gap: 7px; }
+.summary-card .sc-label .ic { width: 15px; height: 15px; opacity: 0.7; }
+.summary-card .sc-value { font-size: 30px; font-weight: 650; letter-spacing: -0.03em; margin-top: 12px; font-variant-numeric: tabular-nums; }
+.summary-card .sc-delta { font-size: 12.5px; margin-top: 7px; display: flex; align-items: center; gap: 6px; color: var(--text-3); }
+.delta-up { color: var(--st-publicado); font-weight: 550; display: inline-flex; align-items: center; gap: 3px; }
+.delta-down { color: var(--tiktok); font-weight: 550; display: inline-flex; align-items: center; gap: 3px; }
+.summary-card::after {
+  content: ''; position: absolute; right: -40px; top: -40px;
+  width: 120px; height: 120px; border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-soft), transparent 70%);
+  pointer-events: none;
+}
+
+.platform-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(228px, 1fr)); gap: 14px;
+}
+.platform-card { padding: 18px; display: flex; flex-direction: column; gap: 15px; transition: border-color 0.18s, transform 0.18s; }
+.platform-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+.pc-head { display: flex; align-items: center; justify-content: space-between; }
+.pc-id { display: flex; align-items: center; gap: 10px; }
+.pc-logo {
+  width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0;
+  display: grid; place-items: center;
+  background: var(--surface-2); border: 1px solid var(--border);
+}
+.pc-logo svg { width: 18px; height: 18px; }
+.pc-name { font-size: 13.5px; font-weight: 600; }
+.pc-handle { font-size: 11.5px; color: var(--text-3); }
+.pc-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 13px 8px; }
+.pc-stat .k { font-size: 11px; color: var(--text-3); }
+.pc-stat .v { font-size: 17px; font-weight: 600; letter-spacing: -0.02em; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.pc-stat .v small { font-size: 11.5px; color: var(--text-3); font-weight: 450; margin-left: 2px; }
+
+/* growth chart */
+.chart-card { padding: 20px 22px; }
+.chart-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 18px; }
+.chart-legend { display: flex; flex-wrap: wrap; gap: 14px; }
+.legend-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--text-2); }
+.legend-swatch { width: 9px; height: 9px; border-radius: 3px; }
+.chart-wrap { position: relative; width: 100%; }
+.chart-svg { width: 100%; height: auto; display: block; overflow: visible; }
+.chart-svg .grid-line { stroke: var(--border-faint); stroke-width: 1; }
+.chart-svg .axis-label { fill: var(--text-4); font-size: 10px; font-family: var(--mono); }
+.chart-svg .series-path { fill: none; stroke-width: 2; }
+.chart-svg .series-dot { stroke: var(--bg); stroke-width: 2; }
+.chart-toggles { display: flex; gap: 6px; flex-wrap: wrap; }
+.chart-toggle {
+  padding: 5px 9px; border-radius: var(--r-pill); font-size: 11.5px; font-weight: 500;
+  border: 1px solid var(--border); background: var(--surface-2); color: var(--text-2);
+  display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s;
+}
+.chart-toggle.off { opacity: 0.4; }
+.chart-toggle .legend-swatch { width: 8px; height: 8px; }
+
+/* ============================================================
+   IDEAS
+   ============================================================ */
+.ideas-top {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 18px 20px; margin-bottom: 18px;
+}
+.ideas-top .it-l { display: flex; flex-direction: column; gap: 3px; }
+.ideas-top h3 { font-size: 14.5px; font-weight: 600; }
+.ideas-top p { font-size: 12.5px; color: var(--text-3); }
+
+.news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+.news-card { padding: 16px 17px; display: flex; flex-direction: column; gap: 12px; transition: border-color 0.18s; }
+.news-card:hover { border-color: var(--border-strong); }
+.news-source { display: flex; align-items: center; gap: 8px; font-size: 11.5px; color: var(--text-3); }
+.news-source .src-dot { width: 16px; height: 16px; border-radius: 5px; background: var(--surface-3); display: grid; place-items: center; font-size: 9px; font-weight: 700; color: var(--accent-hi); }
+.news-card .nc-title { font-size: 14px; font-weight: 550; line-height: 1.4; color: var(--text); text-wrap: pretty; }
+.news-card .nc-foot { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+.news-time { font-size: 11px; color: var(--text-4); font-family: var(--mono); }
+
+.manual-input {
+  display: flex; gap: 10px; align-items: center;
+  padding: 7px 7px 7px 16px; border-radius: var(--r-md);
+  background: var(--surface-1); border: 1px solid var(--border);
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+.manual-input:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.manual-input .ic { width: 17px; height: 17px; color: var(--text-3); flex-shrink: 0; }
+.manual-input input {
+  flex: 1; background: none; border: none; outline: none;
+  color: var(--text); font-size: 14px;
+}
+.manual-input input::placeholder { color: var(--text-4); }
+
+.idea-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 14px; }
+.idea-card { padding: 0; overflow: hidden; display: flex; flex-direction: column; animation: fade 0.4s var(--ease); }
+.idea-hook {
+  padding: 16px 18px;
+  background: linear-gradient(135deg, var(--accent-soft), transparent);
+  border-bottom: 1px solid var(--border);
+}
+.idea-hook .ih-tag { font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; color: var(--accent-hi); text-transform: uppercase; }
+.idea-hook .ih-text { font-size: 15px; font-weight: 600; line-height: 1.35; margin-top: 8px; text-wrap: pretty; }
+.idea-body { padding: 14px 18px 16px; display: flex; flex-direction: column; gap: 12px; }
+.idea-row { display: flex; gap: 11px; }
+.idea-row .ir-k { font-size: 11px; color: var(--text-4); width: 60px; flex-shrink: 0; padding-top: 1px; text-transform: uppercase; letter-spacing: 0.03em; }
+.idea-row .ir-v { font-size: 13px; color: var(--text-2); line-height: 1.45; text-wrap: pretty; }
+.idea-foot { padding: 12px 18px; border-top: 1px solid var(--border); display: flex; gap: 8px; }
+.fmt-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 9px; border-radius: var(--r-pill); font-size: 11px; font-weight: 500;
+  background: var(--surface-2); border: 1px solid var(--border); color: var(--text-2);
+}
+
+/* ============================================================
+   GUIONES
+   ============================================================ */
+.script-layout { display: grid; grid-template-columns: 340px 1fr; gap: 18px; align-items: start; }
+.script-config { padding: 20px; display: flex; flex-direction: column; gap: 20px; position: sticky; top: 92px; }
+.cfg-block { display: flex; flex-direction: column; gap: 10px; }
+.cfg-label { font-size: 12px; font-weight: 550; color: var(--text-2); display: flex; align-items: center; gap: 7px; }
+.cfg-label .ic { width: 14px; height: 14px; color: var(--text-3); }
+textarea.cfg-area {
+  width: 100%; min-height: 92px; resize: vertical;
+  background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 12px 13px;
+  color: var(--text); font-size: 13.5px; line-height: 1.5; outline: none;
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+textarea.cfg-area:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+textarea.cfg-area::placeholder { color: var(--text-4); }
+
+.fmt-selector { display: flex; flex-direction: column; gap: 7px; }
+.fmt-option {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 13px; border-radius: var(--r-md);
+  border: 1px solid var(--border); background: var(--surface-2);
+  transition: border-color 0.15s, background 0.15s;
+}
+.fmt-option:hover { border-color: var(--border-strong); }
+.fmt-option.sel { border-color: var(--accent); background: var(--accent-soft); }
+.fmt-radio { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--text-4); flex-shrink: 0; position: relative; transition: border-color 0.15s; }
+.fmt-option.sel .fmt-radio { border-color: var(--accent-hi); }
+.fmt-option.sel .fmt-radio::after { content: ''; position: absolute; inset: 2px; border-radius: 50%; background: var(--accent-hi); }
+.fmt-option .fo-icon { width: 20px; height: 20px; color: var(--text-2); flex-shrink: 0; }
+.fmt-option.sel .fo-icon { color: var(--accent-hi); }
+.fmt-option .fo-meta b { font-size: 13px; font-weight: 550; display: block; }
+.fmt-option .fo-meta span { font-size: 11.5px; color: var(--text-3); }
+
+/* script output */
+.script-output { padding: 0; overflow: hidden; }
+.so-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+.so-head .so-title { display: flex; align-items: center; gap: 10px; font-size: 13.5px; font-weight: 600; }
+.so-dur { font-size: 12px; color: var(--text-3); display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); }
+.so-actions { display: flex; gap: 8px; }
+.script-body { padding: 8px 20px 20px; }
+.script-block { display: grid; grid-template-columns: 110px 1fr; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--border-faint); }
+.script-block:last-child { border-bottom: none; }
+.sb-tag {
+  font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: 0.03em;
+  padding: 4px 9px; border-radius: 6px; height: fit-content; text-align: center;
+  border: 1px solid;
+}
+.sb-tag.hook    { color: var(--accent-hi); border-color: rgba(157,107,255,0.3); background: var(--accent-soft); }
+.sb-tag.camara  { color: var(--st-publicado); border-color: rgba(45,212,167,0.28); background: rgba(45,212,167,0.07); }
+.sb-tag.pantalla{ color: var(--li); border-color: rgba(45,140,255,0.28); background: rgba(45,140,255,0.07); }
+.sb-tag.broll   { color: var(--st-filmado); border-color: rgba(212,164,24,0.3); background: rgba(212,164,24,0.07); }
+.sb-tag.cta     { color: var(--tiktok); border-color: rgba(255,45,85,0.28); background: rgba(255,45,85,0.07); }
+.sb-text { font-size: 14px; line-height: 1.6; color: var(--text); text-wrap: pretty; }
+.sb-text .stage { color: var(--text-3); font-style: italic; }
+
+/* ============================================================
+   CALENDARIO
+   ============================================================ */
+.cal-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.cal-week-nav { display: flex; align-items: center; gap: 12px; }
+.cal-week-nav .wk-range { font-size: 13.5px; font-weight: 550; }
+.cal-nav-btn { width: 30px; height: 30px; border-radius: var(--r-sm); border: 1px solid var(--border); background: var(--surface-2); display: grid; place-items: center; color: var(--text-2); transition: all 0.15s; }
+.cal-nav-btn:hover { background: var(--surface-3); color: var(--text); }
+.cal-legend { display: flex; gap: 14px; flex-wrap: wrap; }
+.cal-leg-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-2); }
+.cal-leg-dot { width: 8px; height: 8px; border-radius: 3px; }
+
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
+.cal-col { display: flex; flex-direction: column; gap: 10px; min-height: 380px; }
+.cal-day-head { display: flex; align-items: baseline; justify-content: space-between; padding: 0 2px 4px; border-bottom: 1px solid var(--border-faint); }
+.cal-day-head .cd-dow { font-size: 12px; font-weight: 600; color: var(--text-2); }
+.cal-day-head .cd-num { font-size: 12px; color: var(--text-4); font-variant-numeric: tabular-nums; }
+.cal-day-head.today .cd-dow { color: var(--accent-hi); }
+.cal-day-head.today .cd-num {
+  color: #fff; background: var(--accent); border-radius: 6px; padding: 1px 6px; font-weight: 600;
+}
+.cal-slots { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+
+.cal-card {
+  padding: 10px 11px; border-radius: var(--r-md);
+  background: var(--surface-1); border: 1px solid var(--border);
+  border-left: 3px solid var(--st-borrador);
+  display: flex; flex-direction: column; gap: 8px;
+  cursor: pointer; transition: border-color 0.15s, transform 0.12s, background 0.15s;
+}
+.cal-card:hover { background: var(--surface-2); transform: translateY(-1px); }
+.cal-card.st-borrador  { border-left-color: var(--st-borrador); }
+.cal-card.st-filmado   { border-left-color: var(--st-filmado); }
+.cal-card.st-editado   { border-left-color: var(--st-editado); }
+.cal-card.st-publicado { border-left-color: var(--st-publicado); }
+.cc-plat { display: flex; align-items: center; gap: 6px; }
+.cc-plat svg { width: 13px; height: 13px; }
+.cc-plat .cc-time { font-size: 10.5px; color: var(--text-4); font-family: var(--mono); margin-left: auto; }
+.cc-title { font-size: 12.5px; font-weight: 500; line-height: 1.35; color: var(--text); text-wrap: pretty; }
+.cc-status { display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 500; }
+.cc-status .st-dot { width: 6px; height: 6px; border-radius: 50%; }
+.st-borrador-c  { color: var(--st-borrador); }
+.st-filmado-c   { color: var(--st-filmado); }
+.st-editado-c   { color: var(--st-editado); }
+.st-publicado-c { color: var(--st-publicado); }
+
+.cal-add {
+  border: 1px dashed var(--border-strong); border-radius: var(--r-md);
+  padding: 10px; display: grid; place-items: center;
+  color: var(--text-4); transition: all 0.15s; background: transparent;
+}
+.cal-add:hover { color: var(--accent-hi); border-color: var(--accent); background: var(--accent-soft); }
+.cal-add svg { width: 16px; height: 16px; }
+
+/* empty + misc */
+.empty-state {
+  padding: 44px; text-align: center; color: var(--text-3);
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+}
+.empty-state .ic { width: 30px; height: 30px; color: var(--text-4); }
+.empty-state b { color: var(--text-2); font-weight: 550; font-size: 14px; }
+.empty-state span { font-size: 12.5px; max-width: 280px; }
+
+.loading-dots span {
+  display: inline-block; width: 5px; height: 5px; border-radius: 50%;
+  background: var(--accent-hi); margin: 0 1px;
+  animation: bounce 1.2s infinite ease-in-out both;
+}
+.loading-dots span:nth-child(2) { animation-delay: 0.15s; }
+.loading-dots span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes bounce { 0%, 80%, 100% { transform: scale(0.5); opacity: 0.4; } 40% { transform: scale(1); opacity: 1; } }
+
+@media (max-width: 1080px) {
+  .summary-grid { grid-template-columns: 1fr; }
+  .script-layout { grid-template-columns: 1fr; }
+  .script-config { position: static; }
+}
+
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sidebar">
+    <button class="collapse-btn" id="collapseBtn" title="Colapsar">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+
+    <div class="brand">
+      <div class="avatar">JC</div>
+      <div class="brand-meta">
+        <span class="brand-name">Joaquín Cajal</span>
+        <span class="brand-handle">@soyjoacocajal</span>
+      </div>
+    </div>
+
+    <nav class="nav" id="nav">
+      <div class="nav-section-label">Workspace</div>
+      <a class="nav-item active" data-page="metrics"><span class="ic-slot"></span><span class="nav-label">Métricas</span></a>
+      <a class="nav-item" data-page="ideas"><span class="ic-slot"></span><span class="nav-label">Generador de ideas</span></a>
+      <a class="nav-item" data-page="script"><span class="ic-slot"></span><span class="nav-label">Generador de guiones</span></a>
+      <a class="nav-item" data-page="calendar"><span class="ic-slot"></span><span class="nav-label">Calendario</span></a>
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="sf-card">
+        <span class="sf-dot"></span>
+        <div class="sf-text"><b>3 de 5 APIs</b><span>conectadas y sincronizando</span></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===================== MAIN ===================== -->
+  <main class="main">
+    <header class="topbar">
+      <div class="topbar-l">
+        <span class="crumb" id="crumb">Workspace · Métricas</span>
+        <h1 class="page-title" id="pageTitle">Métricas</h1>
+      </div>
+      <div class="topbar-r" id="topbarActions"></div>
+    </header>
+
+    <div class="content">
+      <section class="page active" id="page-metrics"></section>
+      <section class="page" id="page-ideas"></section>
+      <section class="page" id="page-script"></section>
+      <section class="page" id="page-calendar"></section>
+    </div>
+  </main>
+
+</div>
+
+<script>
+/* ============================================================
+   Joaquín Cajal — Dashboard · data + render + interacciones
+   (placeholder data, sin lógica real de backend)
+   ============================================================ */
+
+/* ---------- Icon set (stroke, currentColor) ---------- */
+const ICON = {
+  metrics: '<path d="M3 3v18h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M7 14l3-4 3 2 4-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>',
+  bulb: '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.3 1 2.5h6c0-1.2.3-1.8 1-2.5A6 6 0 0 0 12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>',
+  script: '<path d="M5 3h9l5 5v13a0 0 0 0 1 0 0H5a0 0 0 0 1 0 0V3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M14 3v5h5M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
+  calendar: '<rect x="3" y="4" width="18" height="17" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 9h18M8 2v4M16 2v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
+  users: '<path d="M16 19c0-2.2-1.8-4-4-4s-4 1.8-4 4M12 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
+  pulse: '<path d="M3 12h4l2-5 4 12 2-7h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>',
+  layers: '<path d="M12 3 3 8l9 5 9-5-9-5ZM3 13l9 5 9-5M3 18l9 5 9-5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>',
+  search: '<circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
+  sparkle: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
+  arrow: '<path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>',
+  chevron: '<path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>',
+  copy: '<rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M5 15V5a2 2 0 0 1 2-2h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
+  refresh: '<path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M3 21v-5h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>',
+  clock: '<circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
+  plus: '<path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
+  cam: '<rect x="2" y="6" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="m16 10 6-3v10l-6-3" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>',
+  monitor: '<rect x="3" y="4" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 20h8M12 16v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
+  split: '<rect x="3" y="5" width="8" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><rect x="13" y="5" width="8" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/>',
+  pen: '<path d="M4 20h4L18.5 9.5a2.1 2.1 0 0 0-3-3L5 17v3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>',
+  link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7L11 7M14 10a4 4 0 0 0-5.7 0l-3 3A4 4 0 0 0 11 18.7L13 17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>',
+  filter: '<path d="M3 5h18l-7 8v6l-4 2v-8L3 5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>',
+};
+
+/* ---------- Platform brand glyphs ---------- */
+const PLAT_ICON = {
+  tiktok: '<path d="M16.5 3c.3 2 1.5 3.5 3.5 3.8v2.5c-1.4 0-2.6-.4-3.5-1v6.4c0 3.3-2.6 5.8-5.6 5.8C7.6 20.5 5 18 5 14.9c0-3 2.4-5.4 5.8-5.4v2.6c-1.7 0-3.1 1.2-3.1 2.8 0 1.6 1.3 2.9 2.9 2.9 1.7 0 3-1.3 3-3.1V3h2.9Z" fill="#ff2d55"/>',
+  ig: '<rect x="3.5" y="3.5" width="17" height="17" rx="5" fill="none" stroke="#e1306c" stroke-width="1.8"/><circle cx="12" cy="12" r="4" fill="none" stroke="#e1306c" stroke-width="1.8"/><circle cx="17" cy="7" r="1.2" fill="#e1306c"/>',
+  yt: '<rect x="3" y="6" width="18" height="12" rx="3.5" fill="#ff3b30"/><path d="m10 9 5 3-5 3V9Z" fill="#fff"/>',
+  x: '<path d="M4 4h3.6l4 5.6L16.5 4H20l-6.3 8L20 20h-3.6l-4.4-6.1L7 20H3.5l6.6-8.4L4 4Z" fill="#e7e7ea"/>',
+  li: '<rect x="3.5" y="3.5" width="17" height="17" rx="3" fill="#2d8cff"/><path d="M7 9.5v7M7 7.2v.1M10.5 16.5v-4c0-1.4 3.5-1.6 3.5 0v4" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/>',
+};
+
+/* ---------- Data ---------- */
+const PLATFORMS = [
+  { id: 'tiktok', name: 'TikTok',    handle: '@soyjoacocajal', color: '#ff2d55', connected: true,
+    followers: '184.2K', reach: '2.9M', engagement: '11.4%', videos: 38 },
+  { id: 'ig',     name: 'Instagram', handle: '@soyjoacocajal', color: '#e1306c', connected: true,
+    followers: '96.7K',  reach: '1.4M', engagement: '6.8%',  videos: 27 },
+  { id: 'yt',     name: 'YouTube',   handle: '@soyjoacocajal', color: '#ff3b30', connected: false,
+    followers: '41.3K',  reach: '612K', engagement: '4.2%',  videos: 14 },
+  { id: 'x',      name: 'X',         handle: '@soyjoacocajal', color: '#e7e7ea', connected: false,
+    followers: '23.8K',  reach: '488K', engagement: '3.1%',  videos: 52 },
+  { id: 'li',     name: 'LinkedIn',  handle: 'Joaquín Cajal',  color: '#2d8cff', connected: true,
+    followers: '18.5K',  reach: '274K', engagement: '5.6%',  videos: 19 },
+];
+
+const SUMMARY = [
+  { label: 'Seguidores totales',  icon: 'users',  value: '364.5K', delta: '+8.3%', up: true,  sub: 'vs. mes anterior' },
+  { label: 'Engagement promedio', icon: 'pulse',  value: '6.2%',   delta: '+0.9 pts', up: true, sub: 'media ponderada' },
+  { label: 'Contenidos este mes', icon: 'layers', value: '47',     delta: '12 publicados', up: true, sub: 'de 52 planificados' },
+];
+
+/* weekly growth — index = semana, valores en miles de seguidores nuevos acumulados */
+const WEEKS = ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5', 'Sem 6', 'Sem 7', 'Sem 8'];
+const GROWTH = {
+  tiktok: [120, 134, 141, 150, 158, 167, 176, 184],
+  ig:     [78, 81, 84, 87, 90, 92, 94, 97],
+  yt:     [28, 30, 32, 34, 36, 38, 40, 41],
+  x:      [15, 16, 18, 19, 20, 21, 22, 24],
+  li:     [11, 12, 13, 14, 15, 16, 17, 18.5],
+};
+
+const NEWS = [
+  { src: 'TechCrunch', tag: 'TC', title: 'OpenAI lanza agentes que ejecutan tareas en navegador de forma autónoma', time: 'hace 2h' },
+  { src: 'The Verge', tag: 'TV', title: 'Anthropic presenta Claude con memoria persistente entre sesiones', time: 'hace 4h' },
+  { src: 'MIT Tech Review', tag: 'MR', title: 'Estudio: el 41% de las pymes ya automatiza atención al cliente con IA', time: 'hace 6h' },
+  { src: 'Xataka', tag: 'XT', title: 'n8n y Make incorporan nodos nativos de modelos de lenguaje', time: 'hace 9h' },
+  { src: 'Ben\'s Bites', tag: 'BB', title: 'Sora 2 genera vídeo de 60s con audio sincronizado en una sola toma', time: 'hace 11h' },
+  { src: 'Wired', tag: 'WD', title: 'La nueva ola de \u201cmicro-SaaS\u201d construidos por una sola persona con IA', time: 'hace 14h' },
+];
+
+const IDEAS_SEED = [
+  { hook: '\u201cMi agencia despidió a 0 personas con IA. Contraté a 4.\u201d',
+    angulo: 'Romper el miedo: la IA no reemplaza al equipo, multiplica lo que entrega.',
+    formato: 'Solo cámara · 35s', cta: 'Comenta \u201cEQUIPO\u201d y te paso el flujo que usamos.' },
+  { hook: 'Automaticé el onboarding de clientes y recuperé 9 horas/semana.',
+    angulo: 'Caso real con números antes/después + demo del workflow en n8n.',
+    formato: 'Pantalla + cámara · 50s', cta: 'Guarda este reel antes de tu próximo cliente.' },
+  { hook: '3 prompts que uso TODOS los días en la agencia.',
+    angulo: 'Lista rápida y accionable, cada prompt con resultado en pantalla.',
+    formato: 'Solo pantalla · 45s', cta: 'Sígueme para la parte 2 con los avanzados.' },
+];
+
+const FORMATS = [
+  { id: 'camara',   icon: 'cam',     name: 'Solo cámara',     desc: 'Hablás a cámara, sin apoyos' },
+  { id: 'split',    icon: 'split',   name: 'Pantalla + cámara', desc: 'Screen recording con tu cara' },
+  { id: 'pantalla', icon: 'monitor', name: 'Solo pantalla',   desc: 'Voz en off sobre la demo' },
+];
+
+const SCRIPT_VARIANTS = [
+  [
+    { tag: 'HOOK', cls: 'hook', text: '\u201cAutomaticé el onboarding de clientes y recuperé 9 horas a la semana. Te muestro exactamente cómo.\u201d' },
+    { tag: 'A CÁMARA', cls: 'camara', text: 'Antes, cada cliente nuevo me comía media jornada: contratos, accesos, carpetas, mensajes de bienvenida. <span class="stage">(tono cercano, gesto de agotamiento)</span>' },
+    { tag: 'PANTALLA', cls: 'pantalla', text: 'Grabar el workflow en n8n: trigger del formulario → genera contrato → crea carpeta en Drive → manda secuencia de bienvenida. <span class="stage">(zoom a cada nodo)</span>' },
+    { tag: 'B-ROLL', cls: 'broll', text: 'Plano del cliente recibiendo el email automático en el móvil + timelapse del dashboard llenándose.' },
+    { tag: 'CTA', cls: 'cta', text: 'Comenta \u201cFLUJO\u201d y te paso la plantilla completa para que la copies hoy.' },
+  ],
+  [
+    { tag: 'HOOK', cls: 'hook', text: '\u201cDejá de copiar prompts de internet. Te enseño a construir los tuyos en 40 segundos.\u201d' },
+    { tag: 'A CÁMARA', cls: 'camara', text: 'El 90% falla porque pide tareas, no resultados. Cambiá una sola cosa. <span class="stage">(directo, mirada fija)</span>' },
+    { tag: 'PANTALLA', cls: 'pantalla', text: 'Demo en vivo: prompt malo vs. prompt con rol + contexto + formato de salida. Mostrar las dos respuestas lado a lado.' },
+    { tag: 'B-ROLL', cls: 'broll', text: 'Texto animado de la estructura R-C-F apareciendo sobre fondo oscuro.' },
+    { tag: 'CTA', cls: 'cta', text: 'Sígueme para la parte 2 con los 3 prompts que uso en la agencia todos los días.' },
+  ],
+];
+
+const CAL = [
+  { dow: 'Lun', num: 25, today: false, items: [
+    { plat: 'tiktok', time: '09:00', title: 'Reel: 3 prompts diarios de agencia', status: 'publicado' },
+    { plat: 'ig', time: '18:00', title: 'Carrusel: errores al automatizar', status: 'editado' },
+  ]},
+  { dow: 'Mar', num: 26, today: false, items: [
+    { plat: 'yt', time: '12:00', title: 'Tutorial n8n onboarding (long)', status: 'filmado' },
+  ]},
+  { dow: 'Mié', num: 27, today: false, items: [
+    { plat: 'tiktok', time: '09:30', title: 'Caso real: 9h recuperadas', status: 'editado' },
+    { plat: 'x', time: '15:00', title: 'Hilo: stack de IA de la agencia', status: 'borrador' },
+  ]},
+  { dow: 'Jue', num: 28, today: false, items: [
+    { plat: 'li', time: '08:00', title: 'Post: la IA no reemplaza, multiplica', status: 'editado' },
+    { plat: 'ig', time: '19:00', title: 'Reel: tour del dashboard', status: 'filmado' },
+  ]},
+  { dow: 'Vie', num: 29, today: true, items: [
+    { plat: 'tiktok', time: '10:00', title: 'Reel: \u201ccontraté 4 con IA\u201d', status: 'borrador' },
+    { plat: 'yt', time: '17:00', title: 'Short: Sora 2 en 60s', status: 'borrador' },
+  ]},
+  { dow: 'Sáb', num: 30, today: false, items: [
+    { plat: 'ig', time: '11:00', title: 'Behind the scenes set-up', status: 'borrador' },
+  ]},
+  { dow: 'Dom', num: 31, today: false, items: [] },
+];
+
+const STATUS_LABEL = { borrador: 'Borrador', filmado: 'Filmado', editado: 'Editado', publicado: 'Publicado' };
+
+/* ---------- helpers ---------- */
+const ic = (name, cls = 'ic') => `<svg class="${cls}" viewBox="0 0 24 24" fill="none">${ICON[name] || ''}</svg>`;
+const platSvg = (id) => `<svg viewBox="0 0 24 24">${PLAT_ICON[id] || ''}</svg>`;
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+window.DB = { ICON, PLAT_ICON, PLATFORMS, SUMMARY, WEEKS, GROWTH, NEWS, IDEAS_SEED, FORMATS, SCRIPT_VARIANTS, CAL, STATUS_LABEL, ic, platSvg, $, $$ };
+
+</script>
+<script>
+/* ============================================================
+   render.js — construye las 4 secciones y conecta interacciones
+   ============================================================ */
+(function () {
+const { PLATFORMS, SUMMARY, WEEKS, GROWTH, NEWS, IDEAS_SEED, FORMATS, SCRIPT_VARIANTS, CAL, STATUS_LABEL, ic, platSvg, $, $$ } = window.DB;
+
+/* ====================== 1 · MÉTRICAS ====================== */
+function renderMetrics() {
+  const summary = SUMMARY.map(s => `
+    <div class="card summary-card">
+      <div class="sc-label">${ic(s.icon)} ${s.label}</div>
+      <div class="sc-value">${s.value}</div>
+      <div class="sc-delta"><span class="${s.up ? 'delta-up' : 'delta-down'}">${s.up ? '↑' : '↓'} ${s.delta}</span> · ${s.sub}</div>
+    </div>`).join('');
+
+  const platforms = PLATFORMS.map(p => `
+    <div class="card platform-card">
+      <div class="pc-head">
+        <div class="pc-id">
+          <div class="pc-logo">${platSvg(p.id)}</div>
+          <div>
+            <div class="pc-name">${p.name}</div>
+            <div class="pc-handle">${p.handle}</div>
+          </div>
+        </div>
+        <span class="badge api ${p.connected ? 'connected' : ''}" data-api="${p.id}">
+          ${p.connected ? '<span class="dot" style="background:var(--st-publicado)"></span> Conectada' : ic('link', 'ic') + ' Conectar API'}
+        </span>
+      </div>
+      <div class="pc-stats">
+        <div class="pc-stat"><div class="k">Seguidores</div><div class="v">${p.followers}</div></div>
+        <div class="pc-stat"><div class="k">Alcance (30d)</div><div class="v">${p.reach}</div></div>
+        <div class="pc-stat"><div class="k">Engagement</div><div class="v">${p.engagement}</div></div>
+        <div class="pc-stat"><div class="k">Vídeos</div><div class="v">${p.videos}<small>este mes</small></div></div>
+      </div>
+    </div>`).join('');
+
+  return `
+    <div class="summary-grid">${summary}</div>
+    <div class="section-head"><h2>Rendimiento por plataforma</h2><span class="hint">Últimos 30 días</span></div>
+    <div class="platform-grid">${platforms}</div>
+    <div class="section-head"><h2>Crecimiento semanal</h2><span class="hint">Seguidores acumulados · 8 semanas</span></div>
+    <div class="card chart-card">
+      <div class="chart-head">
+        <div class="chart-toggles" id="chartToggles"></div>
+      </div>
+      <div class="chart-wrap" id="chartWrap"></div>
+    </div>`;
+}
+
+/* ---- line chart (SVG, data-viz) ---- */
+const chartState = { hidden: new Set() };
+function drawChart() {
+  const W = 980, H = 320, padL = 44, padR = 16, padT = 14, padB = 32;
+  const innerW = W - padL - padR, innerH = H - padT - padB;
+  const all = Object.entries(GROWTH).filter(([k]) => !chartState.hidden.has(k));
+  const max = Math.max(...all.flatMap(([, v]) => v)) * 1.08;
+  const min = 0;
+  const x = i => padL + (i / (WEEKS.length - 1)) * innerW;
+  const y = v => padT + innerH - ((v - min) / (max - min)) * innerH;
+
+  const gridVals = [0, 0.25, 0.5, 0.75, 1].map(t => min + t * (max - min));
+  const grid = gridVals.map(v => `
+    <line class="grid-line" x1="${padL}" y1="${y(v).toFixed(1)}" x2="${W - padR}" y2="${y(v).toFixed(1)}"/>
+    <text class="axis-label" x="${padL - 8}" y="${(y(v) + 3).toFixed(1)}" text-anchor="end">${Math.round(v)}K</text>`).join('');
+
+  const xlabels = WEEKS.map((w, i) => `<text class="axis-label" x="${x(i).toFixed(1)}" y="${H - 10}" text-anchor="middle">${w}</text>`).join('');
+
+  const series = PLATFORMS.map(p => {
+    if (chartState.hidden.has(p.id)) return '';
+    const data = GROWTH[p.id];
+    const pts = data.map((v, i) => [x(i), y(v)]);
+    const d = pts.map((pt, i) => `${i ? 'L' : 'M'}${pt[0].toFixed(1)},${pt[1].toFixed(1)}`).join(' ');
+    const dots = pts.map(pt => `<circle class="series-dot" cx="${pt[0].toFixed(1)}" cy="${pt[1].toFixed(1)}" r="3" fill="${p.color}"/>`).join('');
+    return `<path class="series-path" d="${d}" stroke="${p.color}" style="filter:drop-shadow(0 0 6px ${p.color}55)"/>${dots}`;
+  }).join('');
+
+  $('#chartWrap').innerHTML = `<svg class="chart-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${grid}${xlabels}${series}</svg>`;
+
+  $('#chartToggles').innerHTML = PLATFORMS.map(p => `
+    <button class="chart-toggle ${chartState.hidden.has(p.id) ? 'off' : ''}" data-toggle="${p.id}">
+      <span class="legend-swatch" style="background:${p.color}"></span>${p.name}
+    </button>`).join('');
+
+  $$('#chartToggles [data-toggle]').forEach(b => b.onclick = () => {
+    const id = b.dataset.toggle;
+    chartState.hidden.has(id) ? chartState.hidden.delete(id) : chartState.hidden.add(id);
+    drawChart();
+  });
+}
+
+/* ====================== 2 · IDEAS ====================== */
+function renderIdeas() {
+  return `
+    <div class="card ideas-top">
+      <div class="it-l">
+        <h3>Radar de tendencias IA</h3>
+        <p>Trae lo último en IA y conviértelo en ideas de reel para tu nicho.</p>
+      </div>
+      <button class="btn primary" id="btnNews">${ic('search')} Buscar noticias IA hoy</button>
+    </div>
+    <div class="news-grid" id="newsGrid"></div>
+
+    <div class="section-head"><h2>O parte de una idea propia</h2></div>
+    <div class="manual-input">
+      ${ic('pen')}
+      <input id="ideaInput" placeholder="Quiero hablar sobre…  (ej: cómo cobrar más por proyectos de automatización)"/>
+      <button class="btn primary sm" id="btnManual">${ic('sparkle')} Generar ideas</button>
+    </div>
+
+    <div class="section-head" id="ideasHead" style="display:none"><h2>Ideas de reel generadas</h2><span class="hint">${IDEAS_SEED.length} propuestas</span></div>
+    <div class="idea-grid" id="ideaGrid"></div>`;
+}
+
+function newsCard(n) {
+  return `
+    <div class="card news-card">
+      <div class="news-source"><span class="src-dot">${n.tag}</span> ${n.src}</div>
+      <div class="nc-title">${n.title}</div>
+      <div class="nc-foot">
+        <span class="news-time">${n.time}</span>
+        <button class="btn ghost sm" data-genidea>${ic('sparkle')} Generar idea de reel</button>
+      </div>
+    </div>`;
+}
+
+function ideaCard(idea) {
+  return `
+    <div class="card idea-card">
+      <div class="idea-hook">
+        <div class="ih-tag">Hook</div>
+        <div class="ih-text">${idea.hook}</div>
+      </div>
+      <div class="idea-body">
+        <div class="idea-row"><div class="ir-k">Ángulo</div><div class="ir-v">${idea.angulo}</div></div>
+        <div class="idea-row"><div class="ir-k">CTA</div><div class="ir-v">${idea.cta}</div></div>
+      </div>
+      <div class="idea-foot">
+        <span class="fmt-chip">${ic('cam')} ${idea.formato}</span>
+        <button class="btn ghost sm" style="margin-left:auto" data-toscript>${ic('script')} A guion ${ic('arrow')}</button>
+      </div>
+    </div>`;
+}
+
+/* ====================== 3 · GUIONES ====================== */
+let scriptFmt = 'split';
+let scriptVariant = 0;
+function renderScript() {
+  return `
+    <div class="script-layout">
+      <div class="card script-config">
+        <div class="cfg-block">
+          <label class="cfg-label">${ic('bulb')} Idea base</label>
+          <textarea class="cfg-area" id="scriptIdea">Automaticé el onboarding de clientes y recuperé 9 horas a la semana — muestro el workflow en n8n paso a paso.</textarea>
+        </div>
+        <div class="cfg-block">
+          <label class="cfg-label">${ic('layers')} Formato</label>
+          <div class="fmt-selector" id="fmtSelector"></div>
+        </div>
+        <button class="btn primary" id="btnGenScript" style="justify-content:center">${ic('sparkle')} Generar guion</button>
+      </div>
+
+      <div class="card script-output">
+        <div class="so-head">
+          <div class="so-title">${ic('script')} Guion sugerido</div>
+          <div style="display:flex;align-items:center;gap:14px">
+            <span class="so-dur">${ic('clock')} <span id="scriptDur">~50s</span></span>
+            <div class="so-actions">
+              <button class="btn ghost sm" id="btnRegen">${ic('refresh')} Regenerar</button>
+              <button class="btn sm" id="btnCopy">${ic('copy')} Copiar</button>
+            </div>
+          </div>
+        </div>
+        <div class="script-body" id="scriptBody"></div>
+      </div>
+    </div>`;
+}
+
+function drawFmtSelector() {
+  $('#fmtSelector').innerHTML = FORMATS.map(f => `
+    <div class="fmt-option ${f.id === scriptFmt ? 'sel' : ''}" data-fmt="${f.id}">
+      <span class="fmt-radio"></span>
+      ${ic(f.icon, 'fo-icon')}
+      <div class="fo-meta"><b>${f.name}</b><span>${f.desc}</span></div>
+    </div>`).join('');
+  $$('#fmtSelector [data-fmt]').forEach(o => o.onclick = () => { scriptFmt = o.dataset.fmt; drawFmtSelector(); });
+}
+
+function drawScriptBody() {
+  const blocks = SCRIPT_VARIANTS[scriptVariant];
+  $('#scriptBody').innerHTML = blocks.map(b => `
+    <div class="script-block">
+      <div class="sb-tag ${b.cls}">${b.tag}</div>
+      <div class="sb-text">${b.text}</div>
+    </div>`).join('');
+  $('#scriptDur').textContent = scriptVariant === 0 ? '~50s' : '~42s';
+}
+
+/* ====================== 4 · CALENDARIO ====================== */
+function renderCalendar() {
+  const legend = ['borrador', 'filmado', 'editado', 'publicado'].map(s => `
+    <span class="cal-leg-item"><span class="cal-leg-dot" style="background:var(--st-${s})"></span>${STATUS_LABEL[s]}</span>`).join('');
+
+  const cols = CAL.map(day => {
+    const cards = day.items.map(it => {
+      const p = PLATFORMS.find(x => x.id === it.plat);
+      return `
+        <div class="cal-card st-${it.status}">
+          <div class="cc-plat">${platSvg(it.plat)}<span class="cc-time">${it.time}</span></div>
+          <div class="cc-title">${it.title}</div>
+          <div class="cc-status st-${it.status}-c"><span class="st-dot" style="background:var(--st-${it.status})"></span>${STATUS_LABEL[it.status]}</div>
+        </div>`;
+    }).join('');
+    return `
+      <div class="cal-col">
+        <div class="cal-day-head ${day.today ? 'today' : ''}">
+          <span class="cd-dow">${day.dow}</span><span class="cd-num">${day.num} may</span>
+        </div>
+        <div class="cal-slots">${cards}<button class="cal-add" title="Añadir contenido">${ic('plus', 'ic')}</button></div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="cal-toolbar">
+      <div class="cal-week-nav">
+        <button class="cal-nav-btn">${ic('chevron', 'ic')}</button>
+        <span class="wk-range">25 — 31 mayo, 2026</span>
+        <button class="cal-nav-btn" style="transform:rotate(180deg)">${ic('chevron', 'ic')}</button>
+      </div>
+      <div class="cal-legend">${legend}</div>
+    </div>
+    <div class="cal-grid">${cols}</div>`;
+}
+
+window.RENDER = { renderMetrics, drawChart, renderIdeas, newsCard, ideaCard, renderScript, drawFmtSelector, drawScriptBody, renderCalendar,
+  get scriptVariant() { return scriptVariant; }, set scriptVariant(v) { scriptVariant = v; } };
+})();
+
+</script>
+<script>
+/* ============================================================
+   app.js — navegación, sidebar, interacciones simuladas
+   ============================================================ */
+(function () {
+  const { ic, $, $$ } = window.DB;
+  const R = window.RENDER;
+
+  const PAGES = {
+    metrics:  { title: 'Métricas',            crumb: 'Workspace · Métricas',  build: R.renderMetrics,
+                actions: `<button class="btn ghost">${ic('refresh')} Sincronizar</button><button class="btn">Últimos 30 días ${ic('chevron')}</button>` },
+    ideas:    { title: 'Generador de ideas',  crumb: 'Workspace · Ideas',     build: R.renderIdeas,
+                actions: `<span class="kbd">⌘ K</span>` },
+    script:   { title: 'Generador de guiones', crumb: 'Workspace · Guiones',  build: R.renderScript,
+                actions: `<button class="btn ghost">${ic('script')} Mis guiones</button>` },
+    calendar: { title: 'Calendario de contenido', crumb: 'Workspace · Calendario', build: R.renderCalendar,
+                actions: `<button class="btn primary">${ic('plus')} Nuevo contenido</button>` },
+  };
+
+  /* inject nav icons */
+  const NAV_IC = { metrics: 'metrics', ideas: 'bulb', script: 'script', calendar: 'calendar' };
+  $$('.nav-item').forEach(n => { n.querySelector('.ic-slot').outerHTML = ic(NAV_IC[n.dataset.page]); });
+
+  let current = null;
+  function go(page) {
+    if (current === page) return;
+    current = page;
+    const cfg = PAGES[page];
+
+    $$('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.page === page));
+    $('#pageTitle').textContent = cfg.title;
+    $('#crumb').textContent = cfg.crumb;
+    $('#topbarActions').innerHTML = cfg.actions;
+
+    const el = $('#page-' + page);
+    if (!el.dataset.built) { el.innerHTML = cfg.build(); el.dataset.built = '1'; afterBuild(page); }
+    $$('.page').forEach(p => p.classList.toggle('active', p.id === 'page-' + page));
+    $('.main').scrollTop = 0;
+  }
+
+  function afterBuild(page) {
+    if (page === 'metrics') initMetrics();
+    if (page === 'ideas') initIdeas();
+    if (page === 'script') initScript();
+    if (page === 'calendar') initCalendar();
+  }
+
+  /* ---------- nav + collapse ---------- */
+  $$('.nav-item').forEach(n => n.addEventListener('click', () => go(n.dataset.page)));
+  $('#collapseBtn').addEventListener('click', () => $('#app').classList.toggle('collapsed'));
+
+  /* ---------- METRICS ---------- */
+  function initMetrics() {
+    R.drawChart();
+    $$('[data-api]').forEach(b => b.addEventListener('click', () => {
+      if (b.classList.contains('connected')) return;
+      b.innerHTML = '<span class="loading-dots"><span></span><span></span><span></span></span>';
+      setTimeout(() => {
+        b.classList.add('connected');
+        b.innerHTML = '<span class="dot" style="background:var(--st-publicado)"></span> Conectada';
+      }, 1100);
+    }));
+  }
+
+  /* ---------- IDEAS ---------- */
+  function initIdeas() {
+    const { NEWS, IDEAS_SEED } = window.DB;
+    const btnNews = $('#btnNews'), newsGrid = $('#newsGrid');
+    const ideaGrid = $('#ideaGrid'), ideasHead = $('#ideasHead');
+
+    function showIdeas() {
+      ideasHead.style.display = 'flex';
+      ideaGrid.innerHTML = '';
+      IDEAS_SEED.forEach((idea, i) => {
+        setTimeout(() => { ideaGrid.insertAdjacentHTML('beforeend', R.ideaCard(idea)); wireIdeaBtns(); }, i * 140);
+      });
+    }
+    function wireIdeaBtns() {
+      $$('#ideaGrid [data-toscript]').forEach(b => b.onclick = () => go('script'));
+    }
+
+    btnNews.addEventListener('click', () => {
+      btnNews.innerHTML = '<span class="loading-dots"><span></span><span></span><span></span></span> Buscando…';
+      newsGrid.innerHTML = '';
+      setTimeout(() => {
+        btnNews.innerHTML = ic('search') + ' Buscar noticias IA hoy';
+        NEWS.forEach((n, i) => setTimeout(() => {
+          newsGrid.insertAdjacentHTML('beforeend', R.newsCard(n));
+          $$('#newsGrid [data-genidea]').forEach(b => b.onclick = showIdeas);
+        }, i * 90));
+      }, 900);
+    });
+
+    $('#btnManual').addEventListener('click', showIdeas);
+    $('#ideaInput').addEventListener('keydown', e => { if (e.key === 'Enter') showIdeas(); });
+
+    // pre-poblar noticias para que no se vea vacío
+    NEWS.forEach(n => newsGrid.insertAdjacentHTML('beforeend', R.newsCard(n)));
+    $$('#newsGrid [data-genidea]').forEach(b => b.onclick = showIdeas);
+  }
+
+  /* ---------- SCRIPT ---------- */
+  function initScript() {
+    R.drawFmtSelector();
+    R.drawScriptBody();
+
+    $('#btnGenScript').addEventListener('click', regen);
+    $('#btnRegen').addEventListener('click', regen);
+    function regen() {
+      const body = $('#scriptBody');
+      body.style.opacity = '0.35';
+      R.scriptVariant = (R.scriptVariant + 1) % window.DB.SCRIPT_VARIANTS.length;
+      setTimeout(() => { R.drawScriptBody(); body.style.opacity = '1'; }, 350);
+    }
+
+    $('#btnCopy').addEventListener('click', () => {
+      const txt = window.DB.SCRIPT_VARIANTS[R.scriptVariant]
+        .map(b => `[${b.tag}]\n${b.text.replace(/<[^>]+>/g, '')}`).join('\n\n');
+      navigator.clipboard?.writeText(txt).catch(() => {});
+      const btn = $('#btnCopy');
+      const prev = btn.innerHTML;
+      btn.innerHTML = '✓ Copiado';
+      setTimeout(() => btn.innerHTML = prev, 1500);
+    });
+  }
+
+  /* ---------- CALENDAR ---------- */
+  function initCalendar() {
+    $$('.cal-add').forEach(b => b.addEventListener('click', () => {
+      b.style.borderColor = 'var(--accent)';
+      b.style.color = 'var(--accent-hi)';
+      setTimeout(() => { b.style.borderColor = ''; b.style.color = ''; }, 600);
+    }));
+  }
+
+  /* boot */
+  go('metrics');
+})();
+
+</script>
+</body>
+</html>
